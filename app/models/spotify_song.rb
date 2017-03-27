@@ -1,0 +1,2 @@
+class SpotifySong < Song
+end
