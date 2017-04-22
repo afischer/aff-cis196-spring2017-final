@@ -1,3 +1,4 @@
+require 'sessions_controller.rb'
 class PartiesController < ApplicationController
   before_action :set_party, only: [:show, :edit, :update, :destroy]
 
@@ -22,6 +23,12 @@ class PartiesController < ApplicationController
   # POST /parties
   def create
     @party = Party.new(party_params)
+    if session[:user_id].nil?
+      @user = User.new(:nickname => temp_user_name)
+      session[:user_id] = @user.id if @user.save
+      # TODO: ERROR HANDLE THIS
+      @party.dj_id = @user.id
+    end
 
     if @party.save
       redirect_to @party, notice: 'Party was successfully created.'
@@ -46,13 +53,18 @@ class PartiesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_party
-      @party = Party.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def party_params
-      params.require(:party).permit(:name, :current_song_id)
-    end
+  def temp_user_name
+    "User #{SecureRandom.uuid[0, 5]}"
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_party
+    @party = Party.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def party_params
+    params.require(:party).permit(:name, :current_song_id)
+  end
 end

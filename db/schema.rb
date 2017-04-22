@@ -16,12 +16,12 @@ ActiveRecord::Schema.define(version: 20170327152812) do
   create_table "parties", force: :cascade do |t|
     t.string   "name"
     t.string   "current_song_id"
+    t.integer  "dj_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
 
   create_table "party_users", force: :cascade do |t|
-    t.boolean  "is_dj"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
