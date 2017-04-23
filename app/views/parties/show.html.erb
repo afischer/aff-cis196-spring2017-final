@@ -22,15 +22,80 @@
 </div>
 
 <div class="row">
-  <div class="col-md-4">
-
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Now Playing: Title will go here eventually</h3>
+      </div>
+      <div class="panel-body">
+        <img src="https://placehold.it/500x500" class="img img-responsive">
+        <i>Via Spotify</i> <br>
+        <strong>Song: </strong> Foobar <br>
+        <strong>Artist: </strong> Foobar <br>
+        <strong>Album: </strong> Foobar <br>
+      </div>
+    </div>
   </div>
 
   <div class="col-md-5">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Queue</h3>
+      </div>
 
+      <ul class="list-group">
+        <li class="list-group-item">
+          <div class="media">
+            <div class="media-left">
+              <img class="media-object" src="https://placeholdit.imgix.net/~text?txtsize=20&txt=art&w=64&h=64" class="img img-responsive">
+            </div>
+            <div class="media-body">
+              <h4 class="media-heading">I like Pie</h4>
+              John Johnson <br>
+              The Johnson Album
+            </div>
+            <h4 class="media-body float-right">
+              <span class="glyphicon glyphicon-thumbs-up"></span>
+              <span class="glyphicon glyphicon-thumbs-down"></span>
+              <% if current_user.dj?(@party) %>
+              <span class="glyphicon glyphicon-remove"></span>
+              <% end %>
+            </h4>
+          </div>
+        </li>
+        <li class="list-group-item">Dapibus ac facilisis in</li>
+        <li class="list-group-item">Morbi leo risus</li>
+        <li class="list-group-item">Porta ac consectetur ac</li>
+        <li class="list-group-item">Vestibulum at eros</li>
+        <li class="list-group-item">
+          <%= render 'songs/form' %>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div class="col-md-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Listeners</h3>
+      </div>
 
+      <ul class="list-group">
+        <% @party.users.each do |user| %>
+          <li class="list-group-item">
+            <% user = User.find(user.id) %>
+            <%= user.nickname %>
+            <% if user.dj?(@party) %>
+              <span class="glyphicon glyphicon-cd" data-toggle="tooltip" data-placement="top" title="<%= user.nickname %> is the DJ"></span>
+            <% end %>
+
+          </li>
+        <% end %>
+        <!-- <li class="list-group-item">Dapibus ac facilisis in</li>
+        <li class="list-group-item">Morbi leo risus</li>
+        <li class="list-group-item">Porta ac consectetur ac</li>
+        <li class="list-group-item">Vestibulum at eros</li> -->
+      </ul>
+    </div>
   </div>
 </div>

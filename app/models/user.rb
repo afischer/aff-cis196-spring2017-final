@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   has_many :parties, through: :party_users
 
   def dj?(party)
-    party.dj_id = id
+    party.dj_id == id
   end
 
   def self.temp_user_name

@@ -9,7 +9,8 @@ class PartiesController < ApplicationController
 
   # GET /parties/1
   def show
-    @party.users.append(current_user)
+    @song = Song.new
+    @party.users << current_user unless @party.users.include? current_user
   end
 
   # GET /parties/new
@@ -26,7 +27,7 @@ class PartiesController < ApplicationController
     @party = Party.new(party_params)
     @party.dj_id = current_user.id
     if @party.save
-      @party.users << current_user
+      @party.users << current_user unless @party.users.include? current_user
       redirect_to @party, notice: 'Party was successfully created.'
     else
       render :new
