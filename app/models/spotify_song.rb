@@ -5,8 +5,6 @@ class SpotifySong < Song
 
   def song_search
     song_name = title.tr(' ', '+')
-    artist_name = artist.tr(' ', '+')
-    "#{song_name}+#{artist_name}"
   end
 
   def spotify_uri
@@ -36,6 +34,7 @@ class SpotifySong < Song
     self.title = details['name']
     self.artist = details['artists'].first['name']
     self.album = details['album']['name']
+    # might want to get both small and large art, this is usually 500x500
     self.album_art = details['album']['images'].first['url']
     self.duration = details['duration_ms']
     self.source = 'Spotify'

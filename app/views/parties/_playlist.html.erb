@@ -16,8 +16,8 @@
         <span class="glyphicon glyphicon-thumbs-up"></span>
         <span class="glyphicon glyphicon-thumbs-down"></span>
         <% if current_user.dj?(@party) %>
-        <%= link_to '', s, method: :delete, data: { confirm: 'Are you sure?' }, :class => "glyphicon glyphicon-remove" %>
-        <!-- <span class="glyphicon glyphicon-remove"><%= link_to 'Destroy', s, method: :delete, data: { confirm: 'Are you sure?' } %></span> -->
+        <%= link_to '', s, method: :delete, data: { confirm: 'Are you sure?' }, :class => "glyphicon glyphicon-remove", 'data-toggle': 'tooltip', 'data-placement': 'top', 'title': 'Remove Song' %>
+        <span class="glyphicon glyphicon-play" data-toggle='tooltip' data-placement='top' title='Play <%= s.title %> now'></span>
         <% end %>
       </h4>
     </div>

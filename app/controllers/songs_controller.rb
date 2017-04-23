@@ -22,7 +22,7 @@ class SongsController < ApplicationController
   # POST /songs
   def create
     @party = Party.find(params['song']['party_id']) unless params['song']['party_id'].nil?
-    @song = SpotifySong.new(title: params['song']['title'], artist: params['song']['artist'])
+    @song = SpotifySong.new(title: params['song']['title'])
     if @song.in_spotify?
       @song.save
       @song.add_details
