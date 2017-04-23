@@ -27,9 +27,10 @@ class PartiesController < ApplicationController
       @user = User.new(:nickname => temp_user_name)
       session[:user_id] = @user.id if @user.save
       # TODO: ERROR HANDLE THIS
-      @party.dj_id = @user.id
+    else
+      @user = current_user
     end
-
+    @party.dj_id = @user.id
     if @party.save
       redirect_to @party, notice: 'Party was successfully created.'
     else

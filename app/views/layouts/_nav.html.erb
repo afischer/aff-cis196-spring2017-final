@@ -39,6 +39,12 @@
         <li>
           <a class="glyphicon glyphicon-step-forward"></a>
         </li>
+        <li>
+          <span class="navbar-text">
+            <%= link_to "Howdy, #{current_user.nickname}", edit_user_path(current_user) %>
+            <%= link_to "", edit_user_path(current_user), :class => "glyphicon glyphicon-pencil" %>
+          </span>
+        </li>
       </ul>
     </div>
   </div>
