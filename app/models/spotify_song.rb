@@ -4,7 +4,7 @@ class SpotifySong < Song
   SPOTIFY_BASE_URL = 'https://api.spotify.com/v1/search?q='.freeze
 
   def song_search
-    song_name = title.tr(' ', '+')
+    title.tr(' ', '+')
   end
 
   def spotify_uri

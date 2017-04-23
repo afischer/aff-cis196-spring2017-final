@@ -18,7 +18,7 @@ class PartiesControllerTest < ActionController::TestCase
 
   test "should create party" do
     assert_difference('Party.count') do
-      post :create, party: { current_song_id: @party.current_song_id, name: @party.name }
+      post :create, party: { current_song: @party.current_song, name: @party.name }
     end
 
     assert_redirected_to party_path(assigns(:party))
@@ -35,7 +35,7 @@ class PartiesControllerTest < ActionController::TestCase
   end
 
   test "should update party" do
-    patch :update, id: @party, party: { current_song_id: @party.current_song_id, name: @party.name }
+    patch :update, id: @party, party: { current_song: @party.current_song, name: @party.name }
     assert_redirected_to party_path(assigns(:party))
   end
 

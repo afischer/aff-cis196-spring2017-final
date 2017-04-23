@@ -7,8 +7,7 @@ class SongsController < ApplicationController
   end
 
   # GET /songs/1
-  def show
-  end
+  def show; end
 
   # GET /songs/new
   def new
@@ -16,8 +15,7 @@ class SongsController < ApplicationController
   end
 
   # GET /songs/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /songs
   def create
@@ -55,13 +53,14 @@ class SongsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_song
-      @song = Song.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def song_params
-      params.require(:song).permit(:title, :artist, :album, :album_art, :duration)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_song
+    @song = Song.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def song_params
+    params.require(:song).permit(:title, :artist, :album, :album_art, :duration)
+  end
 end

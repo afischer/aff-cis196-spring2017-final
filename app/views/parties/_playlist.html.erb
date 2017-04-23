@@ -13,11 +13,12 @@
         <%= s.album %>
       </div>
       <h4 class="media-body float-right">
-        <span class="glyphicon glyphicon-thumbs-up"></span>
         <span class="glyphicon glyphicon-thumbs-down"></span>
+        <%= s.score %>
+        <span class="glyphicon glyphicon-thumbs-up"></span>
         <% if current_user.dj?(@party) %>
-        <%= link_to '', s, method: :delete, data: { confirm: 'Are you sure?' }, :class => "glyphicon glyphicon-remove", 'data-toggle': 'tooltip', 'data-placement': 'top', 'title': 'Remove Song' %>
-        <span class="glyphicon glyphicon-play" data-toggle='tooltip' data-placement='top' title='Play <%= s.title %> now'></span>
+        <%= link_to '', Song.find(s), method: :delete, data: { confirm: 'Are you sure?' }, :class => "glyphicon glyphicon-remove", 'data-toggle': 'tooltip', 'data-placement': 'top', 'title': 'Remove Song' %>
+        <a data-confirm="Are you sure? This will play the song immediately" class="glyphicon glyphicon-play" data-toggle="tooltip" data-placement="top" title="" rel="nofollow" data-method="post" href="/parties/<%= @party.id %>/play/<%= s.id %>" data-original-title="Play <%= s.title %> now"></a>
         <% end %>
       </h4>
     </div>

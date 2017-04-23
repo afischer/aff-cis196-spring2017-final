@@ -21,8 +21,6 @@ ActiveRecord::Schema.define(version: 20170327152812) do
     t.datetime "updated_at",      null: false
   end
 
-  add_index "parties", ["current_song_id"], name: "index_parties_on_current_song_id"
-
   create_table "party_users", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "party_id"
@@ -37,9 +35,9 @@ ActiveRecord::Schema.define(version: 20170327152812) do
     t.string   "album_art"
     t.integer  "duration"
     t.integer  "playlist_position"
-    t.integer  "score"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.integer  "score",             default: 0
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.string   "source"
     t.integer  "party_id"
   end

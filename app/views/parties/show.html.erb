@@ -1,15 +1,5 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @party.name %>
-</p>
-
-<p>
-  <strong>Current song:</strong>
-  <%= @party.current_song_id %>
-</p>
-
 <%= link_to 'Back', parties_path %>
 
 <div class="row">
@@ -25,14 +15,24 @@
   <div class="col-sm-4">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Now Playing: Title will go here eventually</h3>
+        <h3 class="panel-title">
+          Now Playing:
+          <%if @party.current_song.nil? %>
+            Silence.
+          <% else %>
+            <strong><%= @party.current_song.title %></strong> by
+            <%= @party.current_song.artist %>
+          <% end %>
+        </h3>
       </div>
       <div class="panel-body">
-        <img src="https://placehold.it/500x500" class="img img-responsive">
-        <i>Via Spotify</i> <br>
-        <strong>Song: </strong> Foobar <br>
-        <strong>Artist: </strong> Foobar <br>
-        <strong>Album: </strong> Foobar <br>
+        <% unless @party.current_song.nil? %>
+          <img src="<%= @party.current_song.album_art %>" class="img img-responsive">
+          <i>Via <%= @party.current_song.source %></i> <br>
+          <strong>Song: </strong> <%= @party.current_song.title %> <br>
+          <strong>Artist: </strong> <%= @party.current_song.artist %> <br>
+          <strong>Album: </strong> <%= @party.current_song.album %> <br>
+        <% end %>
       </div>
     </div>
   </div>

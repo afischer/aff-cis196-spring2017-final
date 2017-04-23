@@ -1,6 +1,6 @@
 require 'sessions_controller.rb'
 class PartiesController < ApplicationController
-  before_action :set_party, only: [:show, :edit, :update, :destroy]
+  before_action :set_party, only: %i(show edit update destroy play_song)
 
   # GET /parties
   def index
@@ -9,7 +9,6 @@ class PartiesController < ApplicationController
 
   # GET /parties/1
   def show
-    @song = Song.new
     @party.users << current_user unless @party.users.include? current_user
   end
 
@@ -19,8 +18,7 @@ class PartiesController < ApplicationController
   end
 
   # GET /parties/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /parties
   def create
@@ -49,6 +47,16 @@ class PartiesController < ApplicationController
     redirect_to parties_url, notice: 'Party was successfully destroyed.'
   end
 
+  def play_song
+    @party = Party.find(params[:id])
+    song = Song.find(params[:song_id])
+    return redirect_to @party, notice: 'Song does not exist.' if song.nil?
+    return redirect_to @party, notice: 'Song not in playlist.' unless @party.songs.include? song
+    @party.current_song = song
+    @party.save
+    redirect_to @party, notice: "Now playing #{song.title} by #{song.artist}"
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -58,6 +66,6 @@ class PartiesController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def party_params
-    params.require(:party).permit(:name, :current_song_id)
+    params.require(:party).permit(:name, :current_song)
   end
 end

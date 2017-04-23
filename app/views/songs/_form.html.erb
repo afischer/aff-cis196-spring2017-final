@@ -1,3 +1,4 @@
+<% @song = Song.new %>
 <%= form_for(@song) do |f| %>
   <% if @song.errors.any? %>
     <div id="error_explanation">

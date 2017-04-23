@@ -2,8 +2,8 @@
 
 one:
   name: MyString
-  current_song_id: MyString
+  current_song: MyString
 
 two:
   name: MyString
-  current_song_id: MyString
+  current_song: MyString
