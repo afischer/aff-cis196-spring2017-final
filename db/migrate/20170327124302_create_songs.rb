@@ -6,8 +6,10 @@ class CreateSongs < ActiveRecord::Migration
       t.string :album
       t.string :album_art
       t.integer :duration
-
+      t.integer :playlist_position
+      t.integer :score
       t.timestamps null: false
+      t.references :party
     end
   end
 end

@@ -34,8 +34,11 @@ ActiveRecord::Schema.define(version: 20170327152812) do
     t.string   "album"
     t.string   "album_art"
     t.integer  "duration"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "playlist_position"
+    t.integer  "score"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.integer  "party_id"
   end
 
   create_table "users", force: :cascade do |t|

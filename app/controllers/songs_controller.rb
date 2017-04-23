@@ -32,7 +32,8 @@ class SongsController < ApplicationController
       notice = 'Song creation failed.'
       res = false
     end
-    @party.add_song(@song) unless @party.nil?
+    @song.party = @party unless @party.nil?
+    @song.save
     return redirect_to @party, notice: notice unless @party.nil?
     render 'songs/show', notice: notice # FIXME: Notices not working
     res
