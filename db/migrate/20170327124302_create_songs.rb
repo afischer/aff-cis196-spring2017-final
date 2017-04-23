@@ -9,6 +9,7 @@ class CreateSongs < ActiveRecord::Migration
       t.integer :playlist_position
       t.integer :score
       t.timestamps null: false
+      t.string :source
       t.references :party
     end
   end

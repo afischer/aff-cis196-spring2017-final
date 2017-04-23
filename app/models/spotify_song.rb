@@ -28,24 +28,17 @@ class SpotifySong < Song
   def add_details
     search_params = song_search
     spotify_endpoint = "#{SPOTIFY_BASE_URL}#{search_params}&type=track"
-    p spotify_endpoint
     details = JSON.parse(open(spotify_endpoint).read)['tracks']['items'].first
     save_meta(details)
   end
 
   def save_meta(details)
     self.title = details['name']
-    p "title is #{title}"
     self.artist = details['artists'].first['name']
-    p "artist is #{artist}"
     self.album = details['album']['name']
-    p "alb is #{album}"
-
     self.album_art = details['album']['images'].first['url']
-    p "art is #{album_art}"
-
     self.duration = details['duration_ms']
-    p "duration is #{duration}"
+    self.source = 'Spotify'
     save
   end
 end
