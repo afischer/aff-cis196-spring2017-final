@@ -17,9 +17,18 @@
  *= require users
  */
 
- // Bootstrap
- @import "bootstrap-sprockets";
- @import "bootstrap";
+// Bootstrap
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+@font-face {
+  font-family: 'pacifico';
+  src: font-url('pacifico.eot');
+  src: font-url('pacifico.eot?iefix') format('eot'),
+       font-url('pacifico.woff') format('woff'),
+       font-url('pacifico.ttf') format('truetype'),
+       font-url('pacifico.svg#webfont') format('svg');
+}
 
 body {
   padding-top: 50px; // For navbar
