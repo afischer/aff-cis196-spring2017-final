@@ -21,21 +21,19 @@ class SongsController < ApplicationController
 
   # POST /songs
   def create
-    notice = 'Song was successfully created.'
     @party = Party.find(params['song']['party_id']) unless params['song']['party_id'].nil?
     @song = SpotifySong.new(title: params['song']['title'], artist: params['song']['artist'])
     if @song.in_spotify?
       @song.save
-      p '~~~~~~~~~~~~~'
       @song.add_details
-      p '~~~~~~~~~~~~~'
       notice = 'Song was successfully created.'
       res = true
     else
       notice = 'Song creation failed.'
       res = false
     end
-    redirect_to @party, notice: notice if @party
+    @party.add_song(@song) unless @party.nil?
+    return redirect_to @party, notice: notice unless @party.nil?
     render 'songs/show', notice: notice # FIXME: Notices not working
     res
   end
