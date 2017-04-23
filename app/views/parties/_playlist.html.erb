@@ -1,0 +1,21 @@
+<% songs.each do |s| %>
+  <li class="list-group-item">
+    <div class="media">
+      <div class="media-left">
+        <img class="media-object" src="<%= s.album_art %>" width="64" class="img img-responsive">
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading"><%= s.title %></h4>
+        <%= s.artist %> <br>
+        <%= s.album %>
+      </div>
+      <h4 class="media-body float-right">
+        <span class="glyphicon glyphicon-thumbs-up"></span>
+        <span class="glyphicon glyphicon-thumbs-down"></span>
+        <% if current_user.dj?(@party) %>
+        <span class="glyphicon glyphicon-remove"></span>
+        <% end %>
+      </h4>
+    </div>
+  </li>
+<% end %>

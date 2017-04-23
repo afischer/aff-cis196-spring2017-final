@@ -40,29 +40,11 @@
   <div class="col-md-5">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Queue</h3>
+        <h3 class="panel-title">Upcoming Playlist</h3>
       </div>
 
       <ul class="list-group">
-        <li class="list-group-item">
-          <div class="media">
-            <div class="media-left">
-              <img class="media-object" src="https://placeholdit.imgix.net/~text?txtsize=20&txt=art&w=64&h=64" class="img img-responsive">
-            </div>
-            <div class="media-body">
-              <h4 class="media-heading">I like Pie</h4>
-              John Johnson <br>
-              The Johnson Album
-            </div>
-            <h4 class="media-body float-right">
-              <span class="glyphicon glyphicon-thumbs-up"></span>
-              <span class="glyphicon glyphicon-thumbs-down"></span>
-              <% if current_user.dj?(@party) %>
-              <span class="glyphicon glyphicon-remove"></span>
-              <% end %>
-            </h4>
-          </div>
-        </li>
+        <%= render partial: "playlist", locals: {songs: @party.songs} %>
         <li class="list-group-item">Dapibus ac facilisis in</li>
         <li class="list-group-item">Morbi leo risus</li>
         <li class="list-group-item">Porta ac consectetur ac</li>
