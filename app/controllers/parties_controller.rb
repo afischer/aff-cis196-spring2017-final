@@ -9,6 +9,7 @@ class PartiesController < ApplicationController
 
   # GET /parties/1
   def show
+    @party.users.append(current_user)
   end
 
   # GET /parties/new
@@ -23,15 +24,9 @@ class PartiesController < ApplicationController
   # POST /parties
   def create
     @party = Party.new(party_params)
-    if session[:user_id].nil?
-      @user = User.new(:nickname => temp_user_name)
-      session[:user_id] = @user.id if @user.save
-      # TODO: ERROR HANDLE THIS
-    else
-      @user = current_user
-    end
-    @party.dj_id = @user.id
+    @party.dj_id = current_user.id
     if @party.save
+      @party.users << current_user
       redirect_to @party, notice: 'Party was successfully created.'
     else
       render :new
@@ -54,10 +49,6 @@ class PartiesController < ApplicationController
   end
 
   private
-
-  def temp_user_name
-    "User #{SecureRandom.uuid[0, 5]}"
-  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_party

@@ -22,6 +22,8 @@ ActiveRecord::Schema.define(version: 20170327152812) do
   end
 
   create_table "party_users", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "party_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

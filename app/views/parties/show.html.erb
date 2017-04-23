@@ -10,5 +10,27 @@
   <%= @party.current_song_id %>
 </p>
 
-<%= link_to 'Edit', edit_party_path(@party) %> |
 <%= link_to 'Back', parties_path %>
+
+<div class="row">
+  <h1>
+    <%= @party.name %>
+    <% if current_user.dj?(@party) %>
+      <%= link_to '', edit_party_path(@party), :class => "glyphicon glyphicon-pencil" %>
+    <% end %>
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-md-4">
+
+  </div>
+
+  <div class="col-md-5">
+
+  </div>
+
+  <div class="col-md-3">
+
+  </div>
+</div>
