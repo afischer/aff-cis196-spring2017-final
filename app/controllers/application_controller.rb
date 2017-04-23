@@ -6,7 +6,6 @@ class ApplicationController < ActionController::Base
   # check if a user has a session; if not create one.
 
   def create_session
-    p "CREATING SESSION!!!"
     @user = User.new(nickname: User.temp_user_name)
     @user.save
     session[:user_id] = @user.id
@@ -22,9 +21,7 @@ class ApplicationController < ActionController::Base
   end
 
   helper_method def current_user
-    p "DOES SESSION EXIST??? #{session_exists?}"
     create_session unless session_exists?
-    p "DOES DB USER EXIST??? #{db_user_exists?}"
     user = User.find(session[:user_id]) if db_user_exists?
     return create_session if user.nil?
     user

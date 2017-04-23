@@ -16,7 +16,7 @@
   <h1>
     <%= @party.name %>
     <% if current_user.dj?(@party) %>
-      <%= link_to '', edit_party_path(@party), :class => "glyphicon glyphicon-pencil" %>
+      <%= link_to '', edit_party_path(@party), :class => "glyphicon glyphicon-pencil", 'data-toggle': 'tooltip', 'data-placement': 'top', 'title': 'Rename Party' %>
     <% end %>
   </h1>
 </div>
@@ -45,10 +45,6 @@
 
       <ul class="list-group">
         <%= render partial: "playlist", locals: {songs: @party.songs} %>
-        <li class="list-group-item">Dapibus ac facilisis in</li>
-        <li class="list-group-item">Morbi leo risus</li>
-        <li class="list-group-item">Porta ac consectetur ac</li>
-        <li class="list-group-item">Vestibulum at eros</li>
         <li class="list-group-item">
           <%= render 'songs/form' %>
         </li>
@@ -68,7 +64,7 @@
             <% user = User.find(user.id) %>
             <%= user.nickname %>
             <% if user.dj?(@party) %>
-              <span class="glyphicon glyphicon-cd" data-toggle="tooltip" data-placement="top" title="<%= user.nickname %> is the DJ"></span>
+              <span class="glyphicon glyphicon-cd" data-toggle="tooltip" data-placement="right" title="<%= user.nickname %> is the DJ"></span>
             <% end %>
 
           </li>

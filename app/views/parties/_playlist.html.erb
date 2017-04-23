@@ -1,3 +1,6 @@
+<% unless songs.any? %>
+<li class="list-group-item list-group-item-info">Looks like your playlist is empty. Add a song below!</li>
+<% end %>
 <% songs.each do |s| %>
   <li class="list-group-item">
     <div class="media">
@@ -13,7 +16,8 @@
         <span class="glyphicon glyphicon-thumbs-up"></span>
         <span class="glyphicon glyphicon-thumbs-down"></span>
         <% if current_user.dj?(@party) %>
-        <span class="glyphicon glyphicon-remove"></span>
+        <%= link_to '', s, method: :delete, data: { confirm: 'Are you sure?' }, :class => "glyphicon glyphicon-remove" %>
+        <!-- <span class="glyphicon glyphicon-remove"><%= link_to 'Destroy', s, method: :delete, data: { confirm: 'Are you sure?' } %></span> -->
         <% end %>
       </h4>
     </div>

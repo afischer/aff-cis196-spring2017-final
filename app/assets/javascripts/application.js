@@ -13,3 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap-sprockets
+
+jQuery( function($) {
+  $("[data-placement]").tooltip()
+});
