@@ -5,8 +5,8 @@ Rails.application.routes.draw do
   post '/parties/:id/play/:song_id' => 'parties#play_song'
 
   resources :songs
-  post 'songs/:song_id/upvote' => 'songs#upvote'
-  post 'songs/:song_id/downvote' => 'songs#downvote'
+  post '/parties/:id/songs/:song_id/upvote' => 'songs#upvote'
+  post '/parties/:id/songs/:song_id/downvote' => 'songs#downvote'
 
   resources :users
 end

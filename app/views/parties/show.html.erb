@@ -1,14 +1,14 @@
 <p id="notice"><%= notice %></p>
 
-<%= link_to 'Back', parties_path %>
-
 <div class="row">
-  <h1>
-    <%= @party.name %>
-    <% if current_user.dj?(@party) %>
-      <%= link_to '', edit_party_path(@party), :class => "glyphicon glyphicon-pencil", 'data-toggle': 'tooltip', 'data-placement': 'top', 'title': 'Rename Party' %>
-    <% end %>
-  </h1>
+  <div class="col-xs-12">
+    <h1>
+      <%= @party.name %>
+      <% if current_user.dj?(@party) %>
+        <small><%= link_to '', edit_party_path(@party), :class => "glyphicon glyphicon-pencil", 'data-toggle': 'tooltip', 'data-placement': 'top', 'title': 'Rename Party' %></small>
+      <% end %>
+    </h1>
+  </div>
 </div>
 
 <div class="row">
@@ -28,6 +28,9 @@
       <div class="panel-body">
         <% unless @party.current_song.nil? %>
           <img src="<%= @party.current_song.album_art %>" class="img img-responsive">
+          <% if @party.current_song.source == 'Spotify' %>
+            <iframe src="https://embed.spotify.com/?uri=<%= @party.current_song.uri %>&theme=white" width="100%" height="80" frameborder="0" allowtransparency="true"></iframe></br>
+          <% end %>
           <i>Via <%= @party.current_song.source %></i> <br>
           <strong>Song: </strong> <%= @party.current_song.title %> <br>
           <strong>Artist: </strong> <%= @party.current_song.artist %> <br>

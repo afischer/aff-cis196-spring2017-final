@@ -52,6 +52,22 @@ class SongsController < ApplicationController
     redirect_to songs_url, notice: 'Song was successfully destroyed.'
   end
 
+  def upvote
+    @party = Party.find(params[:id])
+    song = Song.find(params[:song_id])
+    song.score += 1
+    song.save
+    redirect_to @party, notice: 'Upvoted!'
+  end
+
+  def downvote
+    @party = Party.find(params[:id])
+    song = Song.find(params[:song_id])
+    song.score -= 1
+    song.save
+    redirect_to @party, notice: 'Downvoted!'
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

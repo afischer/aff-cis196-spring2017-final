@@ -38,6 +38,7 @@ class SpotifySong < Song
     self.album_art = details['album']['images'].first['url']
     self.duration = details['duration_ms']
     self.source = 'Spotify'
+    self.uri = details['uri']
     save
   end
 end

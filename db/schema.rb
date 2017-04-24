@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20170327152812) do
     t.integer  "score",             default: 0
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
+    t.string   "uri"
     t.string   "source"
     t.integer  "party_id"
   end
