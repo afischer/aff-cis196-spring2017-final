@@ -41,7 +41,7 @@
         </li>
         <li>
           <span class="navbar-text">
-            <%= link_to "Howdy, #{current_user.nickname}", edit_user_path(current_user) %>
+            Howdy, <span id='user_name'><%= link_to "#{current_user.nickname}", edit_user_path(current_user) %></span>
             <%= link_to '', edit_user_path(current_user), :class => "glyphicon glyphicon-pencil" %>
           </span>
         </li>

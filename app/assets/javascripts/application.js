@@ -13,7 +13,31 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap-sprockets
-
+//= require websocket_rails/main
+var $ = jQuery;
 jQuery( function($) {
   $("[data-placement]").tooltip()
+});
+
+var dispatcher = new WebSocketRails('localhost:3000/websocket');
+var user_name = $('#user_name').text();
+
+$(document).ready(function() {
+  jQuery.bootstrapGrowl(`Welcome, ${user_name}`, { type: 'info' });
+});
+
+dispatcher.on_open = function(data) {
+  console.info('Connection has been established: ', data);
+  var message = {
+    party_id: location.pathname.split('/')[2],
+    user_name: user_name
+  }
+
+  dispatcher.trigger('join', message);
+}
+
+dispatcher.bind('join', function(data) {
+  console.log("FOOOOOBAR");
+  console.log(data);
+  jQuery.bootstrapGrowl(`${data.user_name} has joined the party.`, { type: 'info' });
 });
