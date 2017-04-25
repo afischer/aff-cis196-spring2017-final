@@ -34,23 +34,17 @@
           </a>
         </li>
         <li>
-          <a class="glyphicon glyphicon-play play"></a>
-        </li>
-        <li>
-          <a class="glyphicon glyphicon-step-forward"></a>
-        </li>
-        <li>
-          <form class="navbar-form navbar-left" role="search">
+          <form class="navbar-form navbar-left" role="search" id="nav-nickname-form" style="display: none;">
             <div class="form-group">
-              <input type="text" class="form-control" id="new-nickname"  data-user-id="<%= current_user.id %>" placeholder="Nickname" value="<%= current_user.nickname %>">
+              <input type="text" class="form-control" id="new-nickname" data-user-id="<%= current_user.id %>" placeholder="Nickname" value="<%= current_user.nickname %>">
             </div>
             <button class="btn btn-default" id="change-nickname">Change</button>
           </form>
         </li>
         <li>
-          <span class="navbar-text">
-            Howdy, <span id='user_name'><%= link_to "#{current_user.nickname}", edit_user_path(current_user) %></span>
-            <%= link_to '', edit_user_path(current_user), :class => "glyphicon glyphicon-pencil" %>
+          <span id="nav-greating" class="navbar-text">
+            Howdy, <span id='user_name'><%= current_user.nickname %></span>
+            <a id="toggle-nick-edit" class="glyphicon glyphicon-pencil"></a>
           </span>
         </li>
       </ul>

@@ -54,6 +54,11 @@ var removeUser = function(name) {
   $(`#${hyphenate(name)}`).remove()
 };
 
+var changeListedUserName = function(oldName, newName) {
+  $(`#${hyphenate(oldName)}`).text(newName);
+  $(`#${hyphenate(oldName)}`).attr('id', hyphenate(newName));
+};
+
 
 /**
  *
@@ -67,10 +72,6 @@ var changeNickAndAnnounce = function(oldName, newName) {
     old_name: oldName,
     new_name: newName
   };
-  $.bootstrapGrowl(
-    `${oldName} has changed their nickname to ${newName}.`,
-    { type: 'info' }
-  );
   $('#user_name').text(newName);
   dispatcher.trigger('client_changed_name', message);
 }
@@ -88,12 +89,22 @@ $('#change-nickname').on('click', function(event) {
     data: {"user": {"nickname": newNick, "id": userID}, "source": "nav"},
     success: function (data, textStatus, jqXHR) {
       console.log('SUCCESS!');
+      $('#nav-nickname-form').fadeOut(200, function() {
+        $('#nav-greating').fadeIn(200);
+      });
       changeNickAndAnnounce(oldNick, newNick);
     },
     error: function (jqXHR, textStatus, errorThrown) {
       console.log('FAILURE!');
       console.log(textStatus, errorThrown);
     }
+  });
+});
+
+$('#toggle-nick-edit').on('click', function(event) {
+  event.preventDefault();
+  $('#nav-greating').fadeOut(200, function() {
+    $('#nav-nickname-form').fadeIn(200);
   });
 });
 
@@ -128,4 +139,12 @@ dispatcher.bind('client_left_party', function(data) {
     removeUser(data.user_name);
     console.log('User left', data);
   }
+});
+
+dispatcher.bind('client_changed_name', function(data) {
+  $.bootstrapGrowl(
+    `${data.old_name} has changed their nickname to ${data.new_name}.`,
+    { type: 'info' }
+  );
+  changeListedUserName(data.old_name, data.new_name);
 });

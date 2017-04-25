@@ -7,4 +7,8 @@ class SocketController < WebsocketRails::BaseController
     # TODO: remove party from current_user
     broadcast_message :client_left_party, user_name: current_user.nickname
   end
+
+  def client_changed_name
+    broadcast_message :client_changed_name, message
+  end
 end

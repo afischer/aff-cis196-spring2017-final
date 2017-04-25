@@ -34,7 +34,7 @@ class UsersController < ApplicationController
   def update
     patched = @user.update(user_params)
     if patched
-      redirect_to @user, notice: 'User was successfully updated.' unless params['source'].length && params['source'] == 'nav'
+      redirect_to @user, notice: 'User was successfully updated.' unless !params['source'].nil? && params['source'] == 'nav'
       true
     else
       render :edit
