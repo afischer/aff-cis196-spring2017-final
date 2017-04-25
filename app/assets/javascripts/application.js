@@ -15,6 +15,12 @@
 //= require bootstrap-sprockets
 //= require websocket_rails/main
 
+// UTILITIES
+var hyphenate = function(str) {
+  return str.replace(/\s+/g, '-');
+}
+
+// Globals?
 var user_name = $('#user_name').text();
 var ip;
 
@@ -32,6 +38,21 @@ jQuery( function($) {
   $("[data-placement]").tooltip()
   $.bootstrapGrowl(`Welcome, ${user_name}`, { type: 'info' });
 });
+
+// jquery add/remove people magic
+var addUser = function(name) {
+  jQuery.bootstrapGrowl(`${name} has joined the party.`, { type: 'info' });
+  $('#user-list').append(
+    '<li id="' + hyphenate(name) + '" class="list-group-item">' +
+      name +
+    '</li>'
+  );
+};
+
+var removeUser = function(name) {
+  jQuery.bootstrapGrowl(`${name} has left the party.`, { type: 'info' });
+  $(`#${hyphenate(name)}`).remove()
+};
 
 /**
  *
@@ -52,15 +73,13 @@ dispatcher.on_open = function(data) {
 }
 
 dispatcher.bind('client_joined_party', function(data) {
-  console.log('User joind:', data);
-  jQuery.bootstrapGrowl(`${data.user_name} has joined the party.`, { type: 'info' });
-  $('#user-list').append(
-    '<li id="user-' + user_name +'" class="list-group-item">' +
-      data.user_name +
-    '</li>'
-  );
+  if (data.user_name != user_name) { // User joining is not you
+    addUser(data.user_name);
+    console.log('User joind:', data);
+  }
 });
 
 dispatcher.bind('client_left_party', function(data) {
+  removeUser(data.user_name);
   console.log('User left', data);
 });
