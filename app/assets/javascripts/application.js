@@ -54,6 +54,49 @@ var removeUser = function(name) {
   $(`#${hyphenate(name)}`).remove()
 };
 
+
+/**
+ *
+ * INTERACTION
+ *
+ */
+ // Navigation change nickname
+var changeNickAndAnnounce = function(oldName, newName) {
+  var message = {
+    party_id: location.pathname.split('/')[2],
+    old_name: oldName,
+    new_name: newName
+  };
+  $.bootstrapGrowl(
+    `${oldName} has changed their nickname to ${newName}.`,
+    { type: 'info' }
+  );
+  $('#user_name').text(newName);
+  dispatcher.trigger('client_changed_name', message);
+}
+
+
+$('#change-nickname').on('click', function(event) {
+  event.preventDefault();
+  var oldNick = $('#user_name').text();
+  var newNick = $('#new-nickname').val();
+  var userID = $('#new-nickname').attr('data-user-id');
+
+  $.ajax({
+    url: '/users/' + userID, // TODO: Serverside check
+    type: 'PATCH',
+    data: {"user": {"nickname": newNick, "id": userID}, "source": "nav"},
+    success: function (data, textStatus, jqXHR) {
+      console.log('SUCCESS!');
+      changeNickAndAnnounce(oldNick, newNick);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.log('FAILURE!');
+      console.log(textStatus, errorThrown);
+    }
+  });
+});
+
 /**
  *
  * WEBSOCKETS

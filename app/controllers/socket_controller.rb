@@ -4,7 +4,7 @@ class SocketController < WebsocketRails::BaseController
   end
 
   def client_disconnected
-    # todo: remove party from current_user
-    broadcast_message :client_left_party, {user_name: current_user.nickname}
+    # TODO: remove party from current_user
+    broadcast_message :client_left_party, user_name: current_user.nickname
   end
 end
