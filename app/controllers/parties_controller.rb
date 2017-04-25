@@ -52,7 +52,7 @@ class PartiesController < ApplicationController
     song = Song.find(params[:song_id])
     return redirect_to @party, notice: 'Song does not exist.' if song.nil?
     return redirect_to @party, notice: 'Song not in playlist.' unless @party.songs.include? song
-    @party.current_song = song
+    @party.current_song_id = song.id
     @party.save
     redirect_to @party, notice: "Now playing #{song.title} by #{song.artist}"
   end

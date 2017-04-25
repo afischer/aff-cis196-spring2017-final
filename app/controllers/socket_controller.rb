@@ -1,13 +1,10 @@
 class SocketController < WebsocketRails::BaseController
-  def join
-    p 'F I R E D H E L L O  O O O O O O O O'
-    p message
-    broadcast_message :join, message
+  def client_joined_party
+    broadcast_message :client_joined_party, message
   end
 
-  def goodbye
-    Viewer.decrement_counter(:count, 1)
-    @count = Viewer.first.count
-    WebsocketRails[:updates].trigger(:update, @count)
+  def client_disconnected
+    # todo: remove party from current_user
+    broadcast_message :client_left_party, {user_name: current_user.nickname}
   end
 end

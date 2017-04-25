@@ -11,7 +11,14 @@ WebsocketRails::EventMap.describe do
   #   subscribe :create, :to => PartiesController, :with_method => :create
   # end
   # The above will handle an event triggered on the client like `product.new`.
-  subscribe :join, 'socket#join'
-  subscribe :client_disconnected, 'socket#goodbye'
-  subscribe :connection_closed, 'socket#goodbye'
+  # subscribe :join, 'socket#join'
+  # subscribe :client_disconnected, 'socket#leave'
+  # subscribe :user_left, 'socket#leave'
+
+  subscribe :client_disconnected, 'socket#client_disconnected'
+  subscribe :client_joined_party, 'socket#client_joined_party'
+
+  # subscribe :connection_closed, 'socket#client_disconnected'
+
+  # subscribe :connection_closed, 'socket#leave'
 end

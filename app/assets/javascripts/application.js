@@ -14,17 +14,33 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require websocket_rails/main
-var $ = jQuery;
+
+var user_name = $('#user_name').text();
+var ip;
+
+$.getJSON('//api.ipify.org?format=jsonp&callback=?', function(data) {
+  ip = data.ip;
+});
+console.log(ip);
+
+/**
+ * BOOTSTRAP
+ * Enable tooltips, growl notifs on load.
+ */
+// Enable tooltips on load
 jQuery( function($) {
   $("[data-placement]").tooltip()
+  $.bootstrapGrowl(`Welcome, ${user_name}`, { type: 'info' });
 });
 
+/**
+ *
+ * WEBSOCKETS
+ *
+ */
 var dispatcher = new WebSocketRails('localhost:3000/websocket');
-var user_name = $('#user_name').text();
-
-$(document).ready(function() {
-  jQuery.bootstrapGrowl(`Welcome, ${user_name}`, { type: 'info' });
-});
+var channel_name = 'party';  // TODO: FIX THIS NAMESPACING
+var channel = dispatcher.subscribe(channel_name);
 
 dispatcher.on_open = function(data) {
   console.info('Connection has been established: ', data);
@@ -32,12 +48,19 @@ dispatcher.on_open = function(data) {
     party_id: location.pathname.split('/')[2],
     user_name: user_name
   }
-
-  dispatcher.trigger('join', message);
+  dispatcher.trigger('client_joined_party', message);
 }
 
-dispatcher.bind('join', function(data) {
-  console.log("FOOOOOBAR");
-  console.log(data);
+dispatcher.bind('client_joined_party', function(data) {
+  console.log('User joind:', data);
   jQuery.bootstrapGrowl(`${data.user_name} has joined the party.`, { type: 'info' });
+  $('#user-list').append(
+    '<li id="user-' + user_name +'" class="list-group-item">' +
+      data.user_name +
+    '</li>'
+  );
+});
+
+dispatcher.bind('client_left_party', function(data) {
+  console.log('User left', data);
 });

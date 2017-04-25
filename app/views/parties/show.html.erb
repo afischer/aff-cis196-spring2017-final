@@ -4,7 +4,7 @@
   <div class="col-xs-12">
     <h1>
       <%= @party.name %>
-      <% if current_user.dj?(@party) %>
+      <% if current_user.dj? @party %>
         <small><%= link_to '', edit_party_path(@party), :class => "glyphicon glyphicon-pencil", 'data-toggle': 'tooltip', 'data-placement': 'top', 'title': 'Rename Party' %></small>
       <% end %>
     </h1>
@@ -12,7 +12,7 @@
 </div>
 
 <div class="row">
-  <div class="col-sm-4">
+  <div class="col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
@@ -28,8 +28,10 @@
       <div class="panel-body">
         <% unless @party.current_song.nil? %>
           <img src="<%= @party.current_song.album_art %>" class="img img-responsive">
-          <% if @party.current_song.source == 'Spotify' %>
-            <iframe src="https://embed.spotify.com/?uri=<%= @party.current_song.uri %>&theme=white" width="100%" height="80" frameborder="0" allowtransparency="true"></iframe></br>
+          <% if current_user.dj? @party %>
+            <% if @party.current_song.source == 'Spotify' %>
+              <iframe src="https://embed.spotify.com/?uri=<%= @party.current_song.uri %>&theme=white" width="100%" height="80" frameborder="0" allowtransparency="true"></iframe></br>
+            <% end %>
           <% end %>
           <i>Via <%= @party.current_song.source %></i> <br>
           <strong>Song: </strong> <%= @party.current_song.title %> <br>
@@ -54,16 +56,15 @@
       </ul>
     </div>
   </div>
-  <h1 id="count"></h1>
 
   <div class="col-md-3">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Listeners</h3>
       </div>
-      <ul class="list-group">
+      <ul id="user-list" class="list-group">
         <% @party.users.each do |user| %>
-          <li class="list-group-item">
+          <li class="list-group-item <% if user.id.equal? current_user.id %>list-group-item-warning<% end %>" id="<%= "user-list-" + user.nickname.tr(' ', '-') %>">
             <% user = User.find(user.id) %>
             <%= user.nickname %>
             <% if user.dj?(@party) %>
