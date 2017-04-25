@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  <div class="col-md-5">
+  <div class="col-md-5 col-sm-7">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Upcoming Playlist</h3>
@@ -57,18 +57,21 @@
     </div>
   </div>
 
-  <div class="col-md-3">
+  <div class="col-md-3 col-sm-5">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Listeners</h3>
       </div>
       <ul id="user-list" class="list-group">
         <% @party.users.each do |user| %>
-          <li class="list-group-item <% if user.id.equal? current_user.id %>list-group-item-warning<% end %>" id="<%= "user-list-" + user.nickname.tr(' ', '-') %>">
+          <li class="list-group-item" id="<%= "user-list-" + user.nickname.tr(' ', '-') %>">
             <% user = User.find(user.id) %>
             <%= user.nickname %>
             <% if user.dj?(@party) %>
               <span class="glyphicon glyphicon-cd" data-toggle="tooltip" data-placement="right" title="<%= user.nickname %> is the DJ"></span>
+            <% end %>
+            <% if user.id.equal? current_user.id %>
+              <span class="glyphicon glyphicon-user" data-toggle="tooltip" data-placement="right" title="This is you!"></span>
             <% end %>
           </li>
         <% end %>

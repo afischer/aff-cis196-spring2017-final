@@ -64,6 +64,7 @@ var channel_name = 'party';  // TODO: FIX THIS NAMESPACING
 var channel = dispatcher.subscribe(channel_name);
 
 dispatcher.on_open = function(data) {
+  // TODO: don't allow multiple connections across tabs!!
   console.info('Connection has been established: ', data);
   var message = {
     party_id: location.pathname.split('/')[2],
@@ -80,6 +81,8 @@ dispatcher.bind('client_joined_party', function(data) {
 });
 
 dispatcher.bind('client_left_party', function(data) {
-  removeUser(data.user_name);
-  console.log('User left', data);
+  if (data.user_name != user_name) {
+    removeUser(data.user_name);
+    console.log('User left', data);
+  }
 });
