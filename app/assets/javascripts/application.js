@@ -12,51 +12,121 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require turbolinks
 //= require bootstrap-sprockets
 //= require websocket_rails/main
 
 // UTILITIES
+
+console.log("LOAAAAD");
+
 var hyphenate = function(str) {
   return str.replace(/\s+/g, '-');
 }
 
 // Globals?
-var user_name = $('#user_name').text();
-var ip;
+// var ip;
 
-$.getJSON('//api.ipify.org?format=jsonp&callback=?', function(data) {
-  ip = data.ip;
-});
-console.log(ip);
+// $.getJSON('//api.ipify.org?format=jsonp&callback=?', function(data) {
+//   ip = data.ip;
+// });
+// console.log(ip);
 
 /**
  * BOOTSTRAP
  * Enable tooltips, growl notifs on load.
  */
 // Enable tooltips on load
-jQuery( function($) {
-  $("[data-placement]").tooltip()
-  $.bootstrapGrowl(`Welcome, ${user_name}`, { type: 'info' });
+
+$(document).ready(function() {
+  jQuery(function($) {
+    var user_name = $('#user_name').text();
+    $.bootstrapGrowl(`Welcome, ${user_name}`, { type: 'info' });
+  });
+});
+
+document.addEventListener("turbolinks:load", function() {
+  jQuery(function($) {
+    $("[data-placement]").tooltip()
+  });
+
+
+  var user_name = $('#user_name').text();
+
+  $('#change-nickname').on('click', function(event) {
+    event.preventDefault();
+    var oldNick = $('#user_name').text();
+    var newNick = $('#new-nickname').val();
+    var userID = $('#new-nickname').attr('data-user-id');
+    // Post to users
+    $.ajax({
+      url: '/users/' + userID, // TODO: Serverside check
+      type: 'PATCH',
+      data: {"user": {"nickname": newNick, "id": userID}, "source": "nav"},
+      success: function (data, textStatus, jqXHR) {
+        console.log('SUCCESS!');
+        $('#nav-nickname-form').fadeOut(200, function() {
+          $('#nav-greating').fadeIn(200);
+        });
+        // Dispatch event
+        changeNickAndAnnounce(oldNick, newNick);
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log('FAILURE!');
+        console.log(textStatus, errorThrown);
+      }
+    });
+  });
+
+  $('#toggle-nick-edit').on('click', function(event) {
+    event.preventDefault();
+    $('#nav-greating').fadeOut(200, function() {
+      $('#nav-nickname-form').fadeIn(200);
+    });
+  });
+
+  // Song Addition and Removal
+  $('#add-song').on('click', function(event) {
+    event.preventDefault();
+    var searchQuery = $('#song_title').val();
+    var partyID = location.pathname.split('/')[2];
+    // Post to users
+    $.ajax({
+      url: '/songs',
+      type: 'POST',
+      data: {"song": {"title": searchQuery, "party_id": partyID}, "source": "nav"},
+      // TODO: serverside validation
+      success: function (data, textStatus, jqXHR) {
+        console.log(data);
+        console.log('SUCCESS!');
+        Turbolinks.visit(window.location);
+        // Dispatch event
+        // changeNickAndAnnounce(oldNick, newNick);
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log('FAILURE!'); // need better error handling
+        console.log(textStatus, errorThrown);
+      }
+    });
+  });
+
 });
 
 // jquery add/remove people magic
 var addUser = function(name) {
   jQuery.bootstrapGrowl(`${name} has joined the party.`, { type: 'info' });
-  $('#user-list').append(
-    '<li id="' + hyphenate(name) + '" class="list-group-item">' +
-      name +
-    '</li>'
-  );
+  if (!($(`#user-list-${hyphenate(name)}`).length)) {
+    $('#user-list').append(
+      '<li id="user-list-' + hyphenate(name) + '" class="list-group-item">' +
+        name +
+      '</li>'
+    );
+  }
 };
 
 var removeUser = function(name) {
   jQuery.bootstrapGrowl(`${name} has left the party.`, { type: 'info' });
   $(`#${hyphenate(name)}`).remove()
-};
-
-var changeListedUserName = function(oldName, newName) {
-  $(`#${hyphenate(oldName)}`).text(newName);
-  $(`#${hyphenate(oldName)}`).attr('id', hyphenate(newName));
 };
 
 
@@ -65,6 +135,7 @@ var changeListedUserName = function(oldName, newName) {
  * INTERACTION
  *
  */
+
  // Navigation change nickname
 var changeNickAndAnnounce = function(oldName, newName) {
   var message = {
@@ -77,36 +148,6 @@ var changeNickAndAnnounce = function(oldName, newName) {
 }
 
 
-$('#change-nickname').on('click', function(event) {
-  event.preventDefault();
-  var oldNick = $('#user_name').text();
-  var newNick = $('#new-nickname').val();
-  var userID = $('#new-nickname').attr('data-user-id');
-
-  $.ajax({
-    url: '/users/' + userID, // TODO: Serverside check
-    type: 'PATCH',
-    data: {"user": {"nickname": newNick, "id": userID}, "source": "nav"},
-    success: function (data, textStatus, jqXHR) {
-      console.log('SUCCESS!');
-      $('#nav-nickname-form').fadeOut(200, function() {
-        $('#nav-greating').fadeIn(200);
-      });
-      changeNickAndAnnounce(oldNick, newNick);
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-      console.log('FAILURE!');
-      console.log(textStatus, errorThrown);
-    }
-  });
-});
-
-$('#toggle-nick-edit').on('click', function(event) {
-  event.preventDefault();
-  $('#nav-greating').fadeOut(200, function() {
-    $('#nav-nickname-form').fadeIn(200);
-  });
-});
 
 /**
  *
@@ -124,7 +165,6 @@ dispatcher.on_open = function(data) {
     party_id: location.pathname.split('/')[2],
     user_name: user_name
   }
-  dispatcher.trigger('client_joined_party', message);
 }
 
 dispatcher.bind('client_joined_party', function(data) {
@@ -142,9 +182,10 @@ dispatcher.bind('client_left_party', function(data) {
 });
 
 dispatcher.bind('client_changed_name', function(data) {
+  Turbolinks.visit(window.location);
+
   $.bootstrapGrowl(
     `${data.old_name} has changed their nickname to ${data.new_name}.`,
     { type: 'info' }
   );
-  changeListedUserName(data.old_name, data.new_name);
 });

@@ -2,7 +2,8 @@
 <html>
 <head>
   <title>Vynl</title>
-  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", 'data-turbolinks-permanent': '' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -13,7 +14,6 @@
   <%= yield %>
 </div>
 
-<%= javascript_include_tag 'application' %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
 </body>
 </html>

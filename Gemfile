@@ -19,8 +19,10 @@ group :development do
   gem 'pry', '0.10.4'
 end
 
-gem 'websocket-rails', '0.7.0'
 gem 'faye-websocket', '0.10.0'
+gem 'websocket-rails', '0.7.0'
 
-gem 'coffee-script', '2.4.1'
 gem 'coffee-rails', '4.2.1'
+gem 'coffee-script', '2.4.1'
+
+gem 'turbolinks', '5.0.1'

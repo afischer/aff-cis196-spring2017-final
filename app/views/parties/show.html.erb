@@ -1,5 +1,6 @@
 <p id="notice"><%= notice %></p>
 
+<%= link_to 'current page', params, id: 'refresh_page_link' %>, style: 'display:none;'
 <div class="row">
   <div class="col-xs-12">
     <h1>
@@ -27,16 +28,20 @@
       </div>
       <div class="panel-body">
         <% unless @party.current_song.nil? %>
+        <div class="col-md-12 col-sm-4 col-xs-12">
           <img src="<%= @party.current_song.album_art %>" class="img img-responsive">
           <% if current_user.dj? @party %>
             <% if @party.current_song.source == 'Spotify' %>
-              <iframe src="https://embed.spotify.com/?uri=<%= @party.current_song.uri %>&theme=white" width="100%" height="80" frameborder="0" allowtransparency="true"></iframe></br>
+              <iframe id="spotify-player" src="https://embed.spotify.com/?uri=<%= @party.current_song.uri %>&theme=white" width="100%" height="80" frameborder="0" allowtransparency="true"></iframe></br>
             <% end %>
           <% end %>
-          <i>Via <%= @party.current_song.source %></i> <br>
-          <strong>Song: </strong> <%= @party.current_song.title %> <br>
+        </div>
+        <div class="col-md-12 col-sm-8 col-ms-12">
+          <span class="lead"><%= @party.current_song.title %></span> <br>
           <strong>Artist: </strong> <%= @party.current_song.artist %> <br>
           <strong>Album: </strong> <%= @party.current_song.album %> <br>
+          <i class="small">Via <%= @party.current_song.source %></i> <br>
+        </div>
         <% end %>
       </div>
     </div>
