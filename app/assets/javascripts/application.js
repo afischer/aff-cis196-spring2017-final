@@ -38,6 +38,7 @@ var hyphenate = function(str) {
  */
 // Enable tooltips on load
 
+// DONE ON FIRST LOAD
 $(document).ready(function() {
   jQuery(function($) {
     var user_name = $('#user_name').text();
@@ -45,11 +46,11 @@ $(document).ready(function() {
   });
 });
 
+// DONE ON RELOAD FROM SERVER
 document.addEventListener("turbolinks:load", function() {
   jQuery(function($) {
     $("[data-placement]").tooltip()
   });
-
 
   var user_name = $('#user_name').text();
 
@@ -69,7 +70,12 @@ document.addEventListener("turbolinks:load", function() {
           $('#nav-greating').fadeIn(200);
         });
         // Dispatch event
-        changeNickAndAnnounce(oldNick, newNick);
+        var message = {
+          party_id: location.pathname.split('/')[2],
+          old_name: oldNick,
+          new_name: newNick
+        };
+        dispatcher.trigger('client_changed_name', message);
       },
       error: function (jqXHR, textStatus, errorThrown) {
         console.log('FAILURE!');
@@ -99,9 +105,8 @@ document.addEventListener("turbolinks:load", function() {
       success: function (data, textStatus, jqXHR) {
         console.log(data);
         console.log('SUCCESS!');
-        Turbolinks.visit(window.location);
-        // Dispatch event
-        // changeNickAndAnnounce(oldNick, newNick);
+        // TODO: TRIGGER EVENT
+        // dispatcher.trigger('client_changed_name', message);
       },
       error: function (jqXHR, textStatus, errorThrown) {
         console.log('FAILURE!'); // need better error handling
@@ -111,43 +116,6 @@ document.addEventListener("turbolinks:load", function() {
   });
 
 });
-
-// jquery add/remove people magic
-var addUser = function(name) {
-  jQuery.bootstrapGrowl(`${name} has joined the party.`, { type: 'info' });
-  if (!($(`#user-list-${hyphenate(name)}`).length)) {
-    $('#user-list').append(
-      '<li id="user-list-' + hyphenate(name) + '" class="list-group-item">' +
-        name +
-      '</li>'
-    );
-  }
-};
-
-var removeUser = function(name) {
-  jQuery.bootstrapGrowl(`${name} has left the party.`, { type: 'info' });
-  $(`#${hyphenate(name)}`).remove()
-};
-
-
-/**
- *
- * INTERACTION
- *
- */
-
- // Navigation change nickname
-var changeNickAndAnnounce = function(oldName, newName) {
-  var message = {
-    party_id: location.pathname.split('/')[2],
-    old_name: oldName,
-    new_name: newName
-  };
-  $('#user_name').text(newName);
-  dispatcher.trigger('client_changed_name', message);
-}
-
-
 
 /**
  *
@@ -165,25 +133,27 @@ dispatcher.on_open = function(data) {
     party_id: location.pathname.split('/')[2],
     user_name: user_name
   }
+  dispatcher.trigger('client_joined_party', message);
 }
 
 dispatcher.bind('client_joined_party', function(data) {
+  Turbolinks.visit(window.location);
+  console.log(`${data.user_name} has joined the party.`);
+
   if (data.user_name != user_name) { // User joining is not you
-    addUser(data.user_name);
-    console.log('User joind:', data);
   }
 });
 
 dispatcher.bind('client_left_party', function(data) {
   if (data.user_name != user_name) {
-    removeUser(data.user_name);
-    console.log('User left', data);
+    Turbolinks.visit(window.location);
+    console.log(`${data.user_name} has left the party.`);
+    jQuery.bootstrapGrowl(`${data.user_name} has left the party.`, { type: 'info' });
   }
 });
 
 dispatcher.bind('client_changed_name', function(data) {
   Turbolinks.visit(window.location);
-
   $.bootstrapGrowl(
     `${data.old_name} has changed their nickname to ${data.new_name}.`,
     { type: 'info' }
