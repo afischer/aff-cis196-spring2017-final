@@ -53,7 +53,7 @@
       </div>
 
       <ul class="list-group">
-        <%= render partial: "playlist", locals: {songs: @party.songs} %>
+        <%= render partial: "playlist", locals: {songs: @party.sorted_songs} %>
         <li class="list-group-item">
           <%= render 'songs/form' %>
         </li>

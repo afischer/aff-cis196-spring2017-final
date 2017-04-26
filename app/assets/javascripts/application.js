@@ -103,9 +103,14 @@ document.addEventListener("turbolinks:load", function() {
       data: {"song": {"title": searchQuery, "party_id": partyID}, "source": "nav"},
       // TODO: serverside validation
       success: function (data, textStatus, jqXHR) {
-        console.log(data);
         console.log('SUCCESS!');
-        // TODO: TRIGGER EVENT
+
+        var name = $('#user_name').text();
+        var message = {
+          party_id: location.pathname.split('/')[2],
+          name: name
+        };
+        dispatcher.trigger('song_added', message);
         // dispatcher.trigger('client_changed_name', message);
       },
       error: function (jqXHR, textStatus, errorThrown) {
@@ -156,6 +161,14 @@ dispatcher.bind('client_changed_name', function(data) {
   Turbolinks.visit(window.location);
   $.bootstrapGrowl(
     `${data.old_name} has changed their nickname to ${data.new_name}.`,
+    { type: 'info' }
+  );
+});
+
+dispatcher.bind('song_added', function(data) {
+  Turbolinks.visit(window.location);
+  $.bootstrapGrowl(
+    `${data.name} added a song.`,
     { type: 'info' }
   );
 });

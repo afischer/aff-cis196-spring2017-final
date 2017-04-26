@@ -11,4 +11,8 @@ class SocketController < WebsocketRails::BaseController
   def client_changed_name
     broadcast_message :client_changed_name, message
   end
+
+  def song_added
+    broadcast_message :song_added, message
+  end
 end

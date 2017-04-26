@@ -7,4 +7,8 @@ class Party < ActiveRecord::Base
     return nil if current_song_id.nil?
     Song.find(current_song_id)
   end
+
+  def sorted_songs
+    songs.sort_by(&:score).reverse!
+  end
 end
