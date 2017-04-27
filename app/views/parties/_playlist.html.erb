@@ -2,6 +2,7 @@
 <li class="list-group-item list-group-item-info">Looks like your playlist is empty. Add a song below!</li>
 <% end %>
 <% songs.each do |s| %>
+  <% unless s == @party.current_song %>
   <li class="list-group-item">
     <div class="media">
       <div class="media-left">
@@ -23,4 +24,5 @@
       </h4>
     </div>
   </li>
+  <% end %>
 <% end %>
