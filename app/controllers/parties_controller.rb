@@ -64,7 +64,7 @@ class PartiesController < ApplicationController
     @party.current_song_id = nil if next_song.nil?
     return redirect_to @party, notice: 'No more songs in playlist.' if next_song.nil?
     @party.current_song_id = next_song.id
-    @party.songs.delete(last_song)
+    @party.songs.delete(last_song) if @party.songs.include? last_song # maybe starting from beginning
     @party.save
     if Song.exists?(@party.current_song_id)
       now_playing = Song.find(@party.current_song_id)

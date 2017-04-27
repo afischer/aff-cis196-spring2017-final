@@ -2,7 +2,12 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.player-panel .glyphicon {
-  font-size: 48px;
-  padding-top: 15px;
+.player-panel {
+  .glyphicon {
+    font-size: 48px;
+    padding-top: 15px;
+  }
+  .noplay-text {
+    padding-top: 25px
+  }
 }
