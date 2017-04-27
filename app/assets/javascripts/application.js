@@ -155,7 +155,7 @@ $(document).on('ready page:load', function(event) {
  * WEBSOCKETS
  *
  */
-var dispatcher = new WebSocketRails('localhost:3000/websocket');
+var dispatcher = new WebSocketRails('<%= ENV["HOST"] %>/websocket');
 var channel_name = 'party';  // TODO: FIX THIS NAMESPACING
 var channel = dispatcher.subscribe(channel_name);
 
