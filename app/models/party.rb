@@ -15,4 +15,8 @@ class Party < ActiveRecord::Base
   def next_song
     songs.max_by(&:score)
   end
+
+  def skip_song
+    songs.sort_by(&:score)[1]
+  end
 end

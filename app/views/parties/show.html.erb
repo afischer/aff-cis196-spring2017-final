@@ -27,10 +27,12 @@
       </div>
       <div id="player-panel" class="panel-body player-panel">
         <% if @party.current_song.nil?  %>
-          <div class="pull-left noplay-text">
-            <span class="lead text-info">Get this party started?</span>
-          </div>
-          <a class="glyphicon glyphicon-play pull-right" rel="nofollow" data-method="post" href="/parties/<%= @party.id %>/next/"></a>
+          <% if @party.songs.size > 0 %>
+            <div class="pull-left noplay-text">
+              <span class="lead text-info">Get this party started?</span>
+            </div>
+            <a class="glyphicon glyphicon-play pull-right" rel="nofollow" data-method="post" href="/parties/<%= @party.id %>/next/"></a>
+        <% end %>
         <% else %>
           <div class="col-md-12 col-sm-4 col-xs-12">
             <img src="<%= @party.current_song.album_art %>" class="img img-responsive">
