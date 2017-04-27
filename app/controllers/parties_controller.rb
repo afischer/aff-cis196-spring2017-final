@@ -1,6 +1,6 @@
 require 'sessions_controller.rb'
 class PartiesController < ApplicationController
-  before_action :set_party, only: %i(show edit update destroy play_song)
+  before_action :set_party, only: %i(show edit update destroy play_song play_next)
 
   # GET /parties
   def index
@@ -55,6 +55,22 @@ class PartiesController < ApplicationController
     @party.current_song_id = song.id
     @party.save
     redirect_to @party, notice: "Now playing #{song.title} by #{song.artist}"
+  end
+
+  def play_next
+    @party = Party.find(params[:id])
+    last_song = @party.current_song_id
+    next_song = @party.next_song
+    @party.current_song_id = nil if next_song.nil?
+    return redirect_to @party, notice: 'No more songs in playlist.' if next_song.nil?
+    @party.current_song_id = next_song.id
+    @party.songs.delete(last_song)
+    @party.save
+    if Song.exists?(@party.current_song_id)
+      now_playing = Song.find(@party.current_song_id)
+      return redirect_to @party, notice: "Now playing #{now_playing.title} by #{now_playing.artist}"
+    end
+    return redirect_to @party, notice: 'No more songs in playlist.'
   end
 
   private

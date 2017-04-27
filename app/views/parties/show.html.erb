@@ -45,7 +45,7 @@
               <i class="small">Via <%= @party.current_song.source %></i> <br>
             </div>
             <div class="pull-right">
-              <a href="#" class="glyphicon glyphicon-step-forward"></a>
+              <a class="glyphicon glyphicon-step-forward" rel="nofollow" data-method="post" href="/parties/<%= @party.id %>/next/"></a>
             </div>
           </div>
         <% end %>
