@@ -25,22 +25,29 @@
           <% end %>
         </h3>
       </div>
-      <div class="panel-body">
-        <% unless @party.current_song.nil? %>
-        <div class="col-md-12 col-sm-4 col-xs-12">
-          <img src="<%= @party.current_song.album_art %>" class="img img-responsive">
-          <% if current_user.dj? @party %>
-            <% if @party.current_song.source == 'Spotify' %>
-              <iframe id="spotify-player" src="https://embed.spotify.com/?uri=<%= @party.current_song.uri %>&theme=white" width="100%" height="80" frameborder="0" allowtransparency="true"></iframe></br>
+      <div id="player-panel" class="panel-body player-panel">
+        <% if @party.current_song.nil? %>
+          <a href="#" class="glyphicon glyphicon-step-forward"></a>
+        <% else %>
+          <div class="col-md-12 col-sm-4 col-xs-12">
+            <img src="<%= @party.current_song.album_art %>" class="img img-responsive">
+            <% if current_user.dj? @party %>
+              <% if @party.current_song.source == 'Spotify' %>
+                <iframe id="spotify-player" src="https://embed.spotify.com/?uri=<%= @party.current_song.uri %>&theme=white" width="100%" height="80" frameborder="0" allowtransparency="true"></iframe></br>
+              <% end %>
             <% end %>
-          <% end %>
-        </div>
-        <div class="col-md-12 col-sm-8 col-ms-12">
-          <span class="lead"><%= @party.current_song.title %></span> <br>
-          <strong>Artist: </strong> <%= @party.current_song.artist %> <br>
-          <strong>Album: </strong> <%= @party.current_song.album %> <br>
-          <i class="small">Via <%= @party.current_song.source %></i> <br>
-        </div>
+          </div>
+          <div class="col-md-12 col-sm-8 col-ms-12">
+            <div class="pull-left">
+              <span class="lead"><%= @party.current_song.title %></span> <br>
+              <strong>Artist: </strong> <%= @party.current_song.artist %> <br>
+              <strong>Album: </strong> <%= @party.current_song.album %> <br>
+              <i class="small">Via <%= @party.current_song.source %></i> <br>
+            </div>
+            <div class="pull-right">
+              <a href="#" class="glyphicon glyphicon-step-forward"></a>
+            </div>
+          </div>
         <% end %>
       </div>
     </div>
