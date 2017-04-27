@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get '/' => 'welcome#index'
+  get '/about' => 'welcome#about'
 
   resources :parties
   post '/parties/:id/play/:song_id' => 'parties#play_song'
