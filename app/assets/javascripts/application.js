@@ -25,7 +25,7 @@ var hyphenate = function(str) {
 $(document).on('ready', function(event) {
   jQuery(function($) {
     var user_name = $('#user_name').text();
-    $.bootstrapGrowl("Welcome," + user_name, { type: 'info' });
+    $.bootstrapGrowl("Welcome, " + user_name, { type: 'info' });
   });
 });
 
@@ -155,7 +155,7 @@ $(document).on('ready page:load', function(event) {
  * WEBSOCKETS
  *
  */
-var dispatcher = new WebSocketRails('<%= ENV["HOST"] %>/websocket');
+var dispatcher = new WebSocketRails(document.location.host + '/websocket');
 var channel_name = 'party';  // TODO: FIX THIS NAMESPACING
 var channel = dispatcher.subscribe(channel_name);
 
