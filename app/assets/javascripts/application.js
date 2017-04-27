@@ -25,7 +25,7 @@ var hyphenate = function(str) {
 $(document).on('ready', function(event) {
   jQuery(function($) {
     var user_name = $('#user_name').text();
-    $.bootstrapGrowl(`Welcome, ${user_name}`, { type: 'info' });
+    $.bootstrapGrowl("Welcome," + user_name, { type: 'info' });
   });
 });
 
@@ -118,7 +118,7 @@ $(document).on('ready page:load', function(event) {
     var partyID = location.pathname.split('/')[2];
 
     $.ajax({
-      url: `/parties/${partyID}/songs/${songID}/upvote`,
+      url: "/parties/" + partyID + "/songs/" + songID + "/upvote",
       type: 'POST',
       success: function (data, textStatus, jqXHR) {
         dispatcher.trigger('song_voted');
@@ -136,7 +136,7 @@ $(document).on('ready page:load', function(event) {
 
     console.log(songID);
     $.ajax({
-      url: `/parties/${partyID}/songs/${songID}/downvote`,
+      url: "/parties/" + partyID + "/songs/" + songID + "/downvote",
       type: 'POST',
       success: function (data, textStatus, jqXHR) {
         dispatcher.trigger('song_voted');
@@ -172,15 +172,15 @@ dispatcher.on_open = function(data) {
 dispatcher.bind('client_joined_party', function(data) {
   Page.refresh({url: document.location, onlyKeys: ['user-list']});
   if (data.user_name != $('#user_name').text()) {
-    console.log(`${data.user_name} has joined the party.`);
+    console.log(data.user_name + "has joined the party.");
   }
 });
 
 dispatcher.bind('client_left_party', function(data) {
   if (data.user_name != $(document.location, '#user_name').text()) {
     // Turbolinks.visit(document.location, [change: 'user-list'])
-    console.log(`${data.user_name} has left the party.`);
-    jQuery.bootstrapGrowl(`${data.user_name} has left the party.`, { type: 'info' });
+    console.log(data.user_name + "has left the party.");
+    jQuery.bootstrapGrowl(data.user_name + "has left the party.", { type: 'info' });
   }
 });
 
@@ -189,7 +189,7 @@ dispatcher.bind('client_changed_name', function(data) {
   Page.refresh({url: document.location, onlyKeys: ['user-playlist']});
 
   $.bootstrapGrowl(
-    `${data.old_name} has changed their nickname to ${data.new_name}.`,
+    data.old_name + "has changed their nickname to" + data.new_name,
     { type: 'info' }
   );
 });
@@ -198,7 +198,7 @@ dispatcher.bind('song_added', function(data) {
   Page.refresh({url: document.location, onlyKeys: ['party-playlist']});
 
   $.bootstrapGrowl(
-    `${data.name} added a song.`,
+    data.name + "added a song.",
     { type: 'info' }
   );
 });
