@@ -23,7 +23,6 @@ class SongsController < ApplicationController
     @party = Party.find(params['song']['party_id']) unless params['song']['party_id'].nil?
     @song = SpotifySong.new(title: params['song']['title'])
     if @song.in_spotify?
-      @song.save
       @song.add_details
       notice = 'Song was successfully created.'
       res = true
@@ -32,7 +31,7 @@ class SongsController < ApplicationController
       res = false
       return false
     end
-    @song.party = @party unless @party.nil?
+    @song.party = @party unless @party.nil? || @party.songs.include?(@song)
     @song.save
     return redirect_to @party, notice: notice unless @party.nil?
     render 'songs/show', notice: notice # FIXME: Notices not working
@@ -58,7 +57,6 @@ class SongsController < ApplicationController
     @party = Party.find(params[:id])
     song = Song.find(params[:song_id])
     song.score += 1
-    song.save
     redirect_to @party, notice: 'Upvoted!'
   end
 

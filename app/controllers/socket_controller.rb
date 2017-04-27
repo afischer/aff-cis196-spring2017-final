@@ -19,4 +19,8 @@ class SocketController < WebsocketRails::BaseController
   def song_voted
     broadcast_message :song_voted, message
   end
+
+  def song_state_change
+    broadcast_message :song_state_change, message
+  end
 end

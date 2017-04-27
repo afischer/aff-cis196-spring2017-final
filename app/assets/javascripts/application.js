@@ -88,6 +88,8 @@ $(document).on('ready page:load', function(event) {
   // Song Addition and Removal
   $('#add-song').on('click', function(event) {
     event.preventDefault();
+    $('#add-song').attr('disabled', true);
+    console.log(event);
     var searchQuery = $('#song_title').val();
     var partyID = location.pathname.split('/')[2];
     // Post to users
@@ -104,10 +106,12 @@ $(document).on('ready page:load', function(event) {
           name: name
         };
         dispatcher.trigger('song_added', message);
+        $('#add-song').attr('disabled', false);
       },
       error: function (jqXHR, textStatus, errorThrown) {
         console.log('FAILURE!'); // need better error handling
         console.log(textStatus, errorThrown);
+        $('#add-song').attr('disabled', false);
       }
     });
   });
@@ -147,7 +151,13 @@ $(document).on('ready page:load', function(event) {
     });
   });
 
+  $('glyphicon-step-forward').on('click', function(event) {
+    dispatcher.trigger('song_state_change');
+  });
 
+  $('glyphicon-play').on('click', function(event) {
+    dispatcher.trigger('song_state_change');
+  });
 });
 
 /**
@@ -186,7 +196,7 @@ dispatcher.bind('client_left_party', function(data) {
 
 dispatcher.bind('client_changed_name', function(data) {
   // Turbolinks.visit(document.location, [change: 'user-list'])
-  Page.refresh({url: document.location, onlyKeys: ['user-playlist']});
+  Page.refresh({url: document.location, onlyKeys: ['user-list']});
 
   $.bootstrapGrowl(
     data.old_name + "has changed their nickname to" + data.new_name,
@@ -205,4 +215,9 @@ dispatcher.bind('song_added', function(data) {
 
 dispatcher.bind('song_voted', function(data) {
   Page.refresh({url: document.location, onlyKeys: ['party-playlist']});
+});
+
+
+dispatcher.bind('song_state_change', function(data) {
+  Page.refresh({url: document.location, onlyKeys: ['party-now-playing']});
 });

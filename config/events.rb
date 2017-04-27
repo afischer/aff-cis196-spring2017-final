@@ -20,6 +20,8 @@ WebsocketRails::EventMap.describe do
   subscribe :client_changed_name, 'socket#client_changed_name'
   subscribe :song_added, 'socket#song_added'
   subscribe :song_voted, 'socket#song_voted'
+  subscribe :song_state_change, 'socket#song_state_change'
+
 
   # subscribe :connection_closed, 'socket#client_disconnected'
 

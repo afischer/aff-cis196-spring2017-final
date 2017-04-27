@@ -1,5 +1,5 @@
 class SpotifySong < Song
-  validates :title, presence: true, uniqueness: true
+  validates :title, presence: true
 
   SPOTIFY_BASE_URL = 'https://api.spotify.com/v1/search?q='.freeze
 

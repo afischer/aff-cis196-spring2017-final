@@ -59,26 +59,27 @@ class PartiesController < ApplicationController
 
   def play_next
     @party = Party.find(params[:id])
-    last_song = Song.find(@party.current_song_id) unless @party.current_song_id.nil?
-    next_song = @party.skip_song
-    if @party.current_song_id.nil? # first song
-      @party.current_song_id = next_song.id
-      @party.save
-      return redirect_to @party, notice: 'Starting the party.'
-    elsif next_song.nil? # no next song
-      @party.songs.delete(last_song) if @party.songs.include? last_song
+
+    if @party.skip_song.nil? # no next song
+      @party.songs.delete(@party.current_song_id)
       @party.save
       return redirect_to @party, notice: 'No more songs in playlist.'
-    else # move to next song
-      @party.songs.delete(last_song) if Song.exists?(last_song) && (@party.songs.include? last_song)
-      @party.save
-
-      @party.current_song_id = next_song.id
-      @party.save
-      now_playing = Song.find(@party.current_song_id)
-      return redirect_to @party, notice: "Now playing #{now_playing.title} by #{now_playing.artist}"
     end
-    redirect_to @party, notice: 'No more songs in playlist.'
+    
+    if @party.current_song_id.nil? # nothing playing
+      @party.current_song_id = @party.next_song.id
+      @party.save
+      return redirect_to @party, notice: 'Starting the party.'
+    end
+    #else move to next song
+
+    curr_song = Song.find(@party.current_song_id)
+    next_song = @party.skip_song
+    @party.songs.delete(curr_song)
+    @party.current_song_id = next_song.id
+    @party.save
+    now_playing = Song.find(@party.current_song_id)
+    return redirect_to @party, notice: "Now playing #{now_playing.title} by #{now_playing.artist}"
   end
 
   private
