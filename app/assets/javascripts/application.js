@@ -12,34 +12,17 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
 //= require bootstrap-sprockets
 //= require websocket_rails/main
+//= require bootstrap-notify
+//= require turbograft
 
 // UTILITIES
-
-console.log("LOAAAAD");
-
 var hyphenate = function(str) {
   return str.replace(/\s+/g, '-');
 }
 
-// Globals?
-// var ip;
-
-// $.getJSON('//api.ipify.org?format=jsonp&callback=?', function(data) {
-//   ip = data.ip;
-// });
-// console.log(ip);
-
-/**
- * BOOTSTRAP
- * Enable tooltips, growl notifs on load.
- */
-// Enable tooltips on load
-
-// DONE ON FIRST LOAD
-$(document).ready(function() {
+$(document).on('ready', function(event) {
   jQuery(function($) {
     var user_name = $('#user_name').text();
     $.bootstrapGrowl(`Welcome, ${user_name}`, { type: 'info' });
@@ -47,9 +30,20 @@ $(document).ready(function() {
 });
 
 // DONE ON RELOAD FROM SERVER
-document.addEventListener("turbolinks:load", function() {
+$(document).on('ready page:load', function(event) {
   jQuery(function($) {
     $("[data-placement]").tooltip()
+
+    $.notifyDefaults({
+      type: 'success',
+      placement: {
+        from: "bottom"
+      },
+      animate:{
+        enter: "animated fadeInUp",
+        exit: 'animated fadeOutRight'
+      }
+    });
   });
 
   var user_name = $('#user_name').text();
@@ -104,14 +98,12 @@ document.addEventListener("turbolinks:load", function() {
       // TODO: serverside validation
       success: function (data, textStatus, jqXHR) {
         console.log('SUCCESS!');
-
         var name = $('#user_name').text();
         var message = {
           party_id: location.pathname.split('/')[2],
           name: name
         };
         dispatcher.trigger('song_added', message);
-        // dispatcher.trigger('client_changed_name', message);
       },
       error: function (jqXHR, textStatus, errorThrown) {
         console.log('FAILURE!'); // need better error handling
@@ -119,6 +111,42 @@ document.addEventListener("turbolinks:load", function() {
       }
     });
   });
+
+  $('.glyphicon-thumbs-up').on('click', function(event) {
+    event.preventDefault();
+    var songID = $(event.target).attr('data-song-id');
+    var partyID = location.pathname.split('/')[2];
+
+    $.ajax({
+      url: `/parties/${partyID}/songs/${songID}/upvote`,
+      type: 'POST',
+      success: function (data, textStatus, jqXHR) {
+        dispatcher.trigger('song_voted');
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.error(textStatus, errorThrown);
+      }
+    });
+  });
+
+  $('.glyphicon-thumbs-down').on('click', function(event) {
+    event.preventDefault();
+    var songID = $(event.target).attr('data-song-id');
+    var partyID = location.pathname.split('/')[2];
+
+    console.log(songID);
+    $.ajax({
+      url: `/parties/${partyID}/songs/${songID}/downvote`,
+      type: 'POST',
+      success: function (data, textStatus, jqXHR) {
+        dispatcher.trigger('song_voted');
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log(textStatus, errorThrown);
+      }
+    });
+  });
+
 
 });
 
@@ -142,23 +170,24 @@ dispatcher.on_open = function(data) {
 }
 
 dispatcher.bind('client_joined_party', function(data) {
-  Turbolinks.visit(window.location);
-  console.log(`${data.user_name} has joined the party.`);
-
-  if (data.user_name != user_name) { // User joining is not you
+  Page.refresh({url: document.location, onlyKeys: ['user-list']});
+  if (data.user_name != $('#user_name').text()) {
+    console.log(`${data.user_name} has joined the party.`);
   }
 });
 
 dispatcher.bind('client_left_party', function(data) {
-  if (data.user_name != user_name) {
-    Turbolinks.visit(window.location);
+  if (data.user_name != $(document.location, '#user_name').text()) {
+    // Turbolinks.visit(document.location, [change: 'user-list'])
     console.log(`${data.user_name} has left the party.`);
     jQuery.bootstrapGrowl(`${data.user_name} has left the party.`, { type: 'info' });
   }
 });
 
 dispatcher.bind('client_changed_name', function(data) {
-  Turbolinks.visit(window.location);
+  // Turbolinks.visit(document.location, [change: 'user-list'])
+  Page.refresh({url: document.location, onlyKeys: ['user-playlist']});
+
   $.bootstrapGrowl(
     `${data.old_name} has changed their nickname to ${data.new_name}.`,
     { type: 'info' }
@@ -166,9 +195,14 @@ dispatcher.bind('client_changed_name', function(data) {
 });
 
 dispatcher.bind('song_added', function(data) {
-  Turbolinks.visit(window.location);
+  Page.refresh({url: document.location, onlyKeys: ['party-playlist']});
+
   $.bootstrapGrowl(
     `${data.name} added a song.`,
     { type: 'info' }
   );
+});
+
+dispatcher.bind('song_voted', function(data) {
+  Page.refresh({url: document.location, onlyKeys: ['party-playlist']});
 });

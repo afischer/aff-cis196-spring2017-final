@@ -15,10 +15,12 @@
     <% @parties.each do |party| %>
       <tr>
         <td><%= party.name %></td>
-        <td><%= party.current_song %></td>
+        <td><%= party.current_song.title unless party.current_song.nil? %></td>
         <td><%= link_to 'Show', party %></td>
-        <td><%= link_to 'Edit', edit_party_path(party) %></td>
-        <td><%= link_to 'Destroy', party, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% if current_user.dj? party %>
+          <td><%= link_to 'Edit', edit_party_path(party) %></td>
+          <td><%= link_to 'Destroy', party, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

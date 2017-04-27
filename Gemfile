@@ -25,4 +25,4 @@ gem 'websocket-rails', '0.7.0'
 gem 'coffee-rails', '4.2.1'
 gem 'coffee-script', '2.4.1'
 
-gem 'turbolinks', '5.0.1'
+gem 'turbograft', '0.4.5'

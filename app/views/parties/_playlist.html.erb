@@ -13,9 +13,9 @@
         <%= s.album %>
       </div>
       <h4 class="media-body float-right">
-        <a class="glyphicon glyphicon-thumbs-down" data-toggle="tooltip" rel="nofollow" data-method="post" href="/parties/<%= @party.id %>/songs/<%= s.id %>/downvote"></a>
+        <a class="glyphicon glyphicon-thumbs-down" data-toggle="tooltip" data-song-id="<%= s.id %>"></a>
         <%= s.score %>
-        <a class="glyphicon glyphicon-thumbs-up" data-toggle="tooltip" rel="nofollow" data-method="post" href="/parties/<%= @party.id %>/songs/<%= s.id %>/upvote"></a>
+        <a class="glyphicon glyphicon-thumbs-up" data-toggle="tooltip" data-song-id="<%= s.id %>"></a>
         <% if current_user.dj?(@party) %>
         <%= link_to '', Song.find(s), method: :delete, data: { confirm: 'Are you sure?' }, :class => "glyphicon glyphicon-remove", 'data-toggle': 'tooltip', 'data-placement': 'top', 'title': 'Remove Song' %>
         <a data-confirm="Are you sure? This will play the song immediately" class="glyphicon glyphicon-play" data-toggle="tooltip" data-placement="top" title="" rel="nofollow" data-method="post" href="/parties/<%= @party.id %>/play/<%= s.id %>" data-original-title="Play <%= s.title %> now"></a>

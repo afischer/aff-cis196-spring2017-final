@@ -23,5 +23,5 @@ test:
   database: ':memory:'
 
 production:
-  <<: *default
-  database: db/production.sqlite3
+  url:  <%= ENV["DATABASE_URL"] %>
+  pool: <%= ENV["DB_POOL"] || ENV['RAILS_MAX_THREADS'] || 5 %>

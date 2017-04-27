@@ -4,7 +4,7 @@ class SocketController < WebsocketRails::BaseController
   end
 
   def client_disconnected
-    # TODO: remove party from current_user
+    current_user.parties.clear # TODO: Make it so you can be part of more than 1 party
     broadcast_message :client_left_party, user_name: current_user.nickname
   end
 
@@ -14,5 +14,9 @@ class SocketController < WebsocketRails::BaseController
 
   def song_added
     broadcast_message :song_added, message
+  end
+
+  def song_voted
+    broadcast_message :song_voted, message
   end
 end

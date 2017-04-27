@@ -52,7 +52,7 @@
         <h3 class="panel-title">Upcoming Playlist</h3>
       </div>
 
-      <ul class="list-group">
+      <ul class="list-group" data-tg-refresh="party-playlist" id="party-playlist">
         <%= render partial: "playlist", locals: {songs: @party.sorted_songs} %>
         <li class="list-group-item">
           <%= render 'songs/form' %>
@@ -66,7 +66,7 @@
       <div class="panel-heading">
         <h3 class="panel-title">Listeners</h3>
       </div>
-      <ul id="user-list" class="list-group">
+      <ul data-tg-refresh="user-list" id="user-list" class="list-group">
         <% @party.users.each do |user| %>
           <li class="list-group-item" id="<%= "user-list-" + user.nickname.tr(' ', '-') %>">
             <% user = User.find(user.id) %>
