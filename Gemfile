@@ -9,6 +9,7 @@ gem 'rails', '4.2.4'
 gem 'sass-rails', '5.0.4'
 gem 'sprockets', '3.4.0'
 gem 'turbograft', '0.4.5'
+gem 'uglifier', '3.2.0'
 gem 'websocket-rails', '0.7.0'
 
 group :development do
